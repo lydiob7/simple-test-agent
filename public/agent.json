@@ -1,0 +1,61 @@
+{
+  "id": "gif-agent",
+  "name": "Giphy Search Agent",
+  "description": "Returns a GIF based on a natural language task",
+  "version": "1.0.0",
+  "endpoint": "/agent/gif",
+  "methods": ["POST"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["task"],
+    "properties": {
+      "task": {
+        "type": "string",
+        "minLength": 3,
+        "description": "Natural language description of the desired GIF"
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["query", "gif"],
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "Extracted Giphy search phrase"
+      },
+      "gif": {
+        "type": "object",
+        "required": ["id", "title", "url"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "searchGiphy",
+      "description": "Search Giphy for a GIF based on extracted keywords",
+      "params": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search phrase used for Giphy API"
+          }
+        }
+      }
+    }
+  ],
+  "healthcheck": {
+    "endpoint": "/health",
+    "expectedStatus": 200
+  }
+}
